@@ -1,0 +1,102 @@
+version: '3.7'
+services:
+  #  kafka-connector:
+  #    image: confluentinc/cp-kafka-connect:6.2.1
+  #    ports:
+  #      - 8083:8083
+  #    environment:
+  #      GROUP_ID: 1
+  #      CONNECT_CONFIG_STORAGE_TOPIC: "connect-config"
+  #      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
+  #      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
+  #      CONNECT_BOOTSTRAP_SERVERS: kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092
+  ##      CONNECT_SCHEMA_NAME_ADJUSTMENT_MODE: avro
+  #      CONNECT_GROUP_ID: compose-connect-group
+  #      CONNECT_REST_PORT: 8083
+  #      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+  #      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+  #      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+  #      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+  #      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+  #      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+  #      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connector"
+  #      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+  #      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
+  #      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+  #      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+  #      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+  #      CONNECT_PLUGIN_PATH: '/usr/share/java,/etc/kafka-connect/jars,/usr/share/confluent-hub-components'
+  #    depends_on:
+  #      - kafka-broker-1
+  #      - kafka-broker-2
+  #      - kafka-broker-3
+  #      - schema-registry
+  #    volumes:
+  #      - "./volumes/connector/debezium-connector-schemaregistry-7.2.5:/kafka/connect/debezium-connector-schemaregistry-7.2.5"
+  #    networks:
+  #      - ${GLOBAL_NETWORK:-kafka}
+  kafka-debezium-connector:
+    image: debezium/connect:1.9
+    ports:
+      - 8083:8083
+    environment:
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: "connect-config"
+      OFFSET_STORAGE_TOPIC: "connect-offsets"
+      STATUS_STORAGE_TOPIC: "connect-status"
+      BOOTSTRAP_SERVERS: PLAINTEXT://kafka-broker-1:9092,PLAINTEXT://kafka-broker-2:9092,PLAINTEXT://kafka-broker-3:9092
+#      LOGGING_LEVEL: "DEBUG"
+#      CONNECT_SCHEMA_NAME_ADJUSTMENT_MODE: avro
+#      KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+#      VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+#      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+#      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+#    depends_on:
+#      - kafka-broker-1
+#      - kafka-broker-2
+#      - kafka-broker-3
+#      - schema-registry
+    volumes:
+      - "./connector/debezium-connector-schemaregistry-7.2.5:/kafka/connect/debezium-connector-schemaregistry-7.2.5"
+    networks:
+      - ${GLOBAL_NETWORK:-kafka}
+#  kafka-connect:
+#    image: confluentinc/cp-kafka-connect:6.2.1
+#    hostname: kafka-connect
+#    container_name: kafka-connect
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      CONNECT_BOOTSTRAP_SERVERS: 'PLAINTEXT://kafka-broker-1:9092,LISTENER_LOCAL://localhost:19092,kafka-broker-2:9092,LISTENER_LOCAL://localhost:29092,kafka-broker-3:9092,LISTENER_LOCAL://localhost:39092'
+#      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
+#      CONNECT_REST_PORT: 8083
+#      CONNECT_GROUP_ID: compose-connect-group
+#      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+#      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+#      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+#      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+#      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+#      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+#      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+#      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema_registry:8081'
+#      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+#      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema_registry:8081'
+#      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+#      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+#      CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+#    volumes:
+#      - ./volumes/kafka-connect:/etc/kafka-connect/jars
+#    networks:
+#      - ${GLOBAL_NETWORK:-kafka}
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "9000:8080"
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092
+    networks:
+      - ${GLOBAL_NETWORK:-kafka}
