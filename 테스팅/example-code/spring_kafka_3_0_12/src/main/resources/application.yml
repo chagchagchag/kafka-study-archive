@@ -1,0 +1,18 @@
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+    producer:
+      bootstrap-servers: localhost:29092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    listener:
+      ack-mode: manual
+
+embedded-test:
+  kafka:
+    user-created-event-topic: user-created-event-topic
