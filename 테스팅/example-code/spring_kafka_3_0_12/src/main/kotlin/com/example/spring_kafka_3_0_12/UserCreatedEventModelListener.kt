@@ -33,7 +33,7 @@ class UserCreatedEventModelListener (
         """.trimIndent())
     }
 
-//    // 1) 에러가 발생한다.
+    // 2) 에러가 발생한다.
 //    @KafkaListener(
 //        id = "user-created-event-model-topic-consumer",
 //        topics = ["user-created-event-model-topic"],
@@ -46,7 +46,7 @@ class UserCreatedEventModelListener (
 //        """.trimIndent())
 //    }
 
-//    // 2) @Payload 로 받는 방식
+    // 1) @Payload 로 받는 방식 : 에러가 발생한다.
 //    @KafkaListener(
 //        id = "user-created-event-model-topic-consumer",
 //        topics = ["user-created-event-model-topic"],
