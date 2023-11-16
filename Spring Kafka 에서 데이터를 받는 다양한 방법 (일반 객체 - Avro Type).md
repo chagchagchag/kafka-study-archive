@@ -1,6 +1,8 @@
 ## Spring Kafka 에서 데이터를 받는 다양한 방법 (일반 객체 - Avro Type)
 
-Avro Json Schema 파일 없이 직접 작성한 `Type`, `Field`, `Schema`, `Payload` 로 데이터의 송수신을 할때에 대해 정리했다. 인프런 예제에서는 Type 은 없고 String 으로 표현, Field, Schema, Payload 를 구현한다. 중첩구조 역시 아니다. 단순한 객체 구조다. 그리고 이 필드들의 변환은 ModelMapper 로 수행한다. 아무래도 교육용 예제이기 때문에 복잡한 구현을 가리기 위해 ModelMapper 를 사용하지 않았나 싶다.
+Avro Json Schema 파일 없이 직접 작성한 `Type`, `Field`, `Schema`, `Payload` 로 데이터의 송수신을 할때에 대해 정리했다. 인프런 예제에서는 Type 은 없고 String 으로 표현, Field, Schema, Payload 를 구현한다. 중첩구조 역시 아니다. 단순한 객체 구조다. 그리고 이 필드들의 변환은 ModelMapper 로 수행한다. 아무래도 교육용 예제이기 때문에 복잡한 구현을 가리기 위해 ModelMapper 를 사용하지 않았나 싶다.<br>
+
+이렇게 Type, Field, Schema, Payload 와 같은 타입들은 모두 spring messaging 에서 제공하는 어노테이션으로 데이터를 바인딩하는 것이 가능하다. 다만 spring-kafka 의 경우 spring messaging 에서 제공하는 interface 를 구체화한 기능에 의해 바인딩시에 별도의 직렬화/역직렬화가 필요한데, 이 때 따르는 자료형의 표준은 avro 의 specification 을 따르게 된다.<br>
 
 <br>
 
